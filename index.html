@@ -342,7 +342,7 @@
                     if (!this.isDragging || !this.isLoaded) return;
                     
                     const deltaX = e.clientX - this.lastX;
-                    const sensitivity = 3;
+                    const sensitivity = 4; // Slightly less sensitive for smoother dress rotation
                     
                     if (Math.abs(deltaX) > sensitivity) {
                         this.rotate(deltaX > 0 ? 1 : -1);
@@ -369,7 +369,7 @@
                     if (!this.isDragging || !this.isLoaded) return;
                     
                     const deltaX = e.touches[0].clientX - this.lastX;
-                    const sensitivity = 3;
+                    const sensitivity = 4; // Slightly less sensitive for smoother dress rotation
                     
                     if (Math.abs(deltaX) > sensitivity) {
                         this.rotate(deltaX > 0 ? 1 : -1);
@@ -384,15 +384,9 @@
             }
 
             rotate(direction) {
-                let newFrame = this.currentFrame + direction;
-                
-                if (newFrame > this.frameCount) {
-                    newFrame = 1;
-                } else if (newFrame < 1) {
-                    newFrame = this.frameCount;
-                }
-                
-                this.showFrame(newFrame);
+                // Use modulo math for perfect seamless looping
+                this.currentFrame = ((this.currentFrame - 1 + direction + this.frameCount) % this.frameCount) + 1;
+                this.showFrame(this.currentFrame);
             }
 
             showErrorMessage() {
@@ -427,9 +421,9 @@
 
             initViewers() {
                 // Initialize 360° viewers
-                this.viewers.push(new Viewer360('viewer1', 'images/product1/', 108));
-                this.viewers.push(new Viewer360('viewer2', 'images/product2/', 75)); // Every other frame for faster loading
-                this.viewers.push(new Viewer360('viewer3', 'images/product3/', 108));
+                this.viewers.push(new Viewer360('viewer1', 'images/product1/', 161));
+                this.viewers.push(new Viewer360('viewer2', 'images/product2/', 161)); // All 150 frames for ultra smooth rotation
+                this.viewers.push(new Viewer360('viewer3', 'images/product3/', 161));
             }
 
             createDots() {
