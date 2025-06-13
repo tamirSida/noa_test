@@ -271,13 +271,15 @@
             }
 
             async preloadImages() {
+                // Only preload first frame and a few key frames for instant start
+                const keyFrames = [1, Math.floor(this.frameCount / 4), Math.floor(this.frameCount / 2), Math.floor(this.frameCount * 3/4)];
                 const loadPromises = [];
                 
-                for (let i = 1; i <= this.frameCount; i++) {
+                for (let frameNum of keyFrames) {
                     const img = new Image();
-                    const frameNumber = String(i).padStart(3, '0');
-                    img.src = `${this.imagePath}ezgif-frame-${frameNumber}.png`;
-                    this.images[i] = img;
+                    const frameNumber = String(frameNum).padStart(3, '0');
+                    img.src = `${this.imagePath}ezgif-frame-${frameNumber}.jpg`;
+                    this.images[frameNum] = img;
                     
                     loadPromises.push(new Promise((resolve, reject) => {
                         img.onload = resolve;
@@ -288,7 +290,7 @@
                 try {
                     await Promise.all(loadPromises);
                     this.isLoaded = true;
-                    console.log(`✅ Loaded ${this.frameCount} frames for ${this.container.id}`);
+                    console.log(`✅ Loaded key frames for ${this.container.id}, lazy loading others`);
                 } catch (error) {
                     console.error(`❌ Error loading images for ${this.container.id}:`, error);
                     this.showErrorMessage();
@@ -302,10 +304,30 @@
             }
 
             showFrame(frameNumber) {
+                // If image is already loaded, show it immediately
                 if (this.images[frameNumber] && this.imgElement) {
                     this.imgElement.src = this.images[frameNumber].src;
                     this.currentFrame = frameNumber;
+                    return;
                 }
+                
+                // Lazy load the image if not loaded yet
+                if (!this.images[frameNumber]) {
+                    const img = new Image();
+                    const frameNumberStr = String(frameNumber).padStart(3, '0');
+                    img.src = `${this.imagePath}ezgif-frame-${frameNumberStr}.jpg`;
+                    
+                    img.onload = () => {
+                        this.images[frameNumber] = img;
+                        if (this.currentFrame === frameNumber) { // Only show if still current
+                            this.imgElement.src = img.src;
+                        }
+                    };
+                    
+                    this.images[frameNumber] = img; // Store the loading image
+                }
+                
+                this.currentFrame = frameNumber;
             }
 
             bindEvents() {
@@ -406,7 +428,7 @@
             initViewers() {
                 // Initialize 360° viewers
                 this.viewers.push(new Viewer360('viewer1', 'images/product1/', 108));
-                this.viewers.push(new Viewer360('viewer2', 'images/product2/', 150));
+                this.viewers.push(new Viewer360('viewer2', 'images/product2/', 75)); // Every other frame for faster loading
                 this.viewers.push(new Viewer360('viewer3', 'images/product3/', 108));
             }
 

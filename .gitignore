@@ -1,0 +1,101 @@
+# Source files (keep these out of git due to large file sizes)
+*.mp4
+*.gif
+*.avi
+*.mov
+*.mkv
+
+# Large image directories (optional - uncomment if you want to exclude images)
+# images/
+# *.jpg
+# *.jpeg
+# *.png
+# *.webp
+
+# Development files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+.env.production
+.env.local
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Temporary folders
+tmp/
+temp/
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# System files
+*.sys
+*.tmp
+
+# Wedding dress specific (large files to exclude)
+raw_videos/
+original_gifs/
+uncompressed/
+source_materials/
+
+# AI-generated files (if you want to regenerate)
+# luma_outputs/
+# higgsfield_exports/
